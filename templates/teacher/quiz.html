@@ -1,0 +1,398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <link rel ='icon' href="{% static 'images/logo.png' %}"/>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@100;200;300;400;600;700&display=swap"
+    rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/student.css' %}">
+    <meta charset="utf-8">
+    <title>QuizzUS</title>
+
+<style>
+    
+.true a {
+    pointer-events: none;
+    text-decoration: none;
+    background: #c4b7c4;
+    color: white;
+    padding: 5px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+   
+
+}
+
+
+
+    .update{
+        text-decoration: none;
+    background: purple;
+    color: white;
+    padding: 5px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    }
+
+.update:hover{
+    text-decoration: none;
+    background: purple;
+    color: white;
+    padding: 5px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+     box-shadow: 2.5px 2px 4px rgb(0 0 0 / 50%); 
+
+}
+
+    table tr td:nth-child(n+6){
+        display: none;
+    }
+    
+        
+
+        
+    </style>
+
+
+</head>
+
+<body>
+
+    
+    <!--header area start-->
+    <div class="nav-container">
+
+        <div class="logo">
+            <h1 style="position: absolute;left: 13%;top: 20%;color:#6e2e9d;font-size: 38px;font-weight: 600;left: 50%;">QuizzUS</h1>
+            <img src="{% static 'images/logo.png' %}"  alt="" style="position: relative;width: 101px;left: 43%;bottom: 9px;">
+
+            
+          </div>    </div>
+   
+
+    <div class="sidebar">
+        <div class ="panel">
+
+        <center>
+
+            <img src="{% static 'images/student.png' %}" class="profile_image" alt="">
+            
+            <h6>{{request.session.tename}}</h6>
+            <h4>(Teacher)</h4>
+
+        </center>
+
+        <ul class="sideitems">
+            <li>
+                <a   href="{% url 'taketoTdash' %}">Home</a>
+            </li>
+
+            {% comment %} <li>
+                <a href="{% url 'taketoreportpage' eml=request.session.stuemail %}">Attemped</a>
+            </li> {% endcomment %}
+
+            <li>
+                <a  href="/" style="margin-top: 100px;">Logout</a>
+            </li>
+
+    </div>
+</div>
+    <!--sidebar end-->
+
+    <div class="content">
+    
+            <div class="row" id ="row" style="background :white">
+                
+                            <table name ="mytab"class="table " id ="tab">
+                
+
+                                <thead bgcolor = "#a721e6e8" >
+                                    <tr>
+                                        <th scope="col">Sr. No.</th>
+                                        <th scope="col">Quiz Name</th>
+                                        <th scope="col">End_Date</th>
+                                        <th scope="col">End_Time</th>
+                                        <th scope="col">Update</th>
+
+
+                                        
+
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for i in c %}
+                                    <tr>
+                                      
+                                    
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        {% comment %} <td><a   id="name" href="" {% for q in s %} {% if q.isattempted == True and q.qname == i.quizname %} class="disabled1" img src="{% static 'images/tick.png' %}" {% endif %} {% endfor %}>{{i.quizname}}</a></td> {% endcomment %}
+                                        <td><a   id="name" href="{% url 'taketoattempted' pk=i.quizname %}">{{i.quizname}}</a></td>
+
+                                        <td id="duedt">{{i.Duedate}}</td>
+                                        <td id="time">{{i.Time}}</td>
+                                        <td><a href="" data-toggle="modal" data-target="#exampleModalCenter" class="update"  >Edit</a></td>
+                                        {% comment %} {% url 'taketoUD' pk=request.session.tename  fk=i.quizname %} {% endcomment %}
+                                        <td id="noquest" style="visibility:hidden;">{{i.noofquest}}</td>
+                                        <td id="ttime" style="visibility:collapse;">{{i.totaltime}}</td>
+                                        {% comment %} <td id="no" style="visibility:hidden;">{{i.noofquest}}</td> {% endcomment %}
+
+
+
+                                        {% comment %} <td><a href="" data-toggle="modal" data-target="#exampleModalCenter"  >Change Due</a></td> {% endcomment %}
+
+                                       
+                                    </tr>
+
+                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                     
+            </div>
+    </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    
+
+<form action="{% url 'updatedetails'  pk=request.session.tename  %}" method="POST">
+        {% csrf_token %}
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% comment %} <h5 name = "quiz" class="modal-title" id="exampleModalLongTitle"></h5> {% endcomment %}
+         <span style="color: purple;font-size: 21px;font-weight: 800;"> Quiz Name : </span> <input name = "quiz10" id="exampleModalLongTitle" style="position: relative;left: 10px;top: 3px;border: none;font-size: 19px;color: purple;"value="">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+
+
+            <p class="single-form">
+                <label>Number of Questions : </label><input style="position: relative;left: 14px; border-color: purple;   border-radius: 6px;    padding: 0px 5px;
+
+                " type="no" name="no" id="no" value=""
+                    required>
+            </p>
+            <p class="single-form">
+                <label>Total Time (mins) : </label><input style="position: relative;left: 41px;border-radius: 6px;   border-color: purple;  padding: 0px 5px;
+
+                " type="no" name="tottime" id="tottime" value=""
+                    required>
+            </p>
+            <p class="single-form">
+                <label>End Date : </label><input style="position: relative;left: 110px;    border-radius: 6px; border-color: purple;    padding: 0px 5px;
+
+                "  type="Date" name="date" id="DATE" value=""
+                    required>
+            </p>
+            <p class="single-form">
+                <label>Quiz End Time : </label><input style="position: relative;left: 72px;    border-radius: 6px;   border-color: purple;  padding: 0px 5px;
+
+                " type="time" name="time" id="Time" value=""
+                    required>
+            </p>
+
+           
+
+           
+          
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+          <button type="submit" class="btn btn-primary" style="background: purple;border-color: purple;">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+    
+
+
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <script>
+        $(".update").click(function() {
+            var $row = $(this).closest("tr");    
+            var $date = $row.find("#duedt").text();
+            var $name = $row.find("#name").text();
+
+            var $time = $row.find("#time").text();
+
+            var $totime = $row.find("#ttime").text(); 
+
+            var $noq = $row.find("#noquest").text(); 
+            console.log(time);
+          
+
+            var now = new Date($date)
+            
+          /*  swal({
+                title: "!",
+                text: "Are You Sure You Want To Update? ",
+                
+                button:  "Yes",
+
+            
+              });   */
+
+            $("#exampleModalLongTitle").val($name);
+
+            $("#no").val($noq);
+            $("#tottime").val($totime);
+            $('#DATE').val($date);
+            $("#Time").val($time);
+
+
+
+
+        });
+
+
+        var date = new Date();
+        var cdate = date.getDate();
+        if (cdate < 10) {
+            cdate = '0' + cdate;
+        }
+        var month = date.getMonth() + 1;
+        if (month < 10) {
+            month = '0' + month;
+        }
+        var year = date.getUTCFullYear();
+        var minDate = year + "-" + month + "-" + cdate;
+        document.getElementById("DATE").setAttribute('min', minDate);
+        console.log(minDate);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        for ( let [i,row] of [...tab.rows].entries() ) 
+    {
+        for( let [j,cell] of [...row.cells].entries() ) 
+        {
+        }
+        var test=document.getElementById("tab").rows[i].cells[2].innerText;
+        console.log(test)
+        var test2=document.getElementById("tab").rows[i].cells[4].innerText;
+        console.log(test2)
+        var test9=document.getElementById("tab").rows[i].cells[3].innerText;
+        console.log(test9)
+
+       
+        var date = new Date();
+        var cdate = date.getDate();
+        if(cdate <10){
+            cdate = '0' +cdate;
+        }
+        var month = date.getMonth() + 1;
+        if(month <10){
+            month = '0' +month;
+        }
+        var year = date.getUTCFullYear();
+        var todayddate = year +"-"+month +"-"+ cdate;
+
+
+        var chr = date.getHours();
+        if(chr<10){
+            chr = '0' +chr;
+        }
+        var min = date.getMinutes();
+        if(min<10){
+            min = '0' +min;
+        }
+        var ttime = chr +":"+min;
+        console.log(ttime);
+
+
+        console.log(todayddate);
+        
+       /* var datedeneka = new Date(test);
+        console.log(datedeneka)*/
+
+        if( (todayddate <= test) && (ttime <= test9) ){
+            
+            var test3=document.getElementById("tab").rows[i].cells[4].setAttribute('class','true');
+
+
+            console.log(test3)
+           window.onload = function(e){
+            var anchors = document.querySelectorAll("[class=true]");
+            
+            for(var i = 0; i<anchors.length ; i++){
+            anchors[i].onclick = function()
+
+            {
+                Swal.fire({
+                    title: 'Updation Link Not Active !',
+                    text: 'Teachers can Update only After the Due Date is Passed !' ,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#800080',
+                  }) 
+                                
+                e.preventDeFault();};
+
+                
+            
+            }
+            };
+
+            console.log(`date ended`)    
+
+        }
+
+
+        else{
+
+                
+
+        }
+       
+
+        console.log(`.........`)
+        console.log(`.........`)
+
+    }
+
+
+    </script>
+</body>
+
+</html>

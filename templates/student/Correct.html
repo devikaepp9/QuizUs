@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <link rel ='icon' href="{% static 'images/logo.png' %}"/>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@100;200;300;400;600;700&display=swap"
+    rel="stylesheet">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+   
+    <link rel="stylesheet" href="{% static 'css/student.css' %}">
+    <meta charset="utf-8">
+    <title>QuizzUS</title>
+
+<style>
+    
+    .correctanswer{
+        border: 6px solid #8def8d;
+        padding: 8px 10px;
+        width: 100%;
+        border-radius: 5px;
+        box-shadow: 1px 3px 4px rgb(0 0 0 / 25%);
+
+    }
+    
+    .green{
+       
+        background: #8def8d;
+        padding: 8px 107px 8px 10px;
+        width: 100%;
+        border-radius: 5px;
+        box-shadow: 1px 3px 4px rgb(0 0 0 / 25%);
+
+        }
+
+    .red{
+        background: #ff969d;
+        padding: 8px 107px 8px 10px;
+        width: 100%;
+        border-radius: 5px;
+        box-shadow: 1px 3px 4px rgb(0 0 0 / 25%);
+
+    }
+    .corheader strong {
+
+        position: absolute;
+    text-align: center;
+    color: #b090ee;
+    left: 798px;
+    top: 34px;
+    font-size: 36px;
+    /* font-weight: 100;
+    }
+    h5{
+        "position: absolute;
+                    width: 300px;
+                    top: 110px;
+                    left: 85%;
+                    font-weight: 900;
+                    color: #646464;
+                    font-size: 22px;
+                    text-align:center
+    }
+</style>
+</head>
+
+<body>
+ 
+    
+
+
+    <!--header area start-->
+    <div class="corheader">
+
+        <h1>Quiz Name : {{pk}}</h1>
+        {% for c in check2%}
+        <strong>Score: {{c.Score}} / {{c.Total_Marks}}</strong>
+        {% endfor %}
+        
+        <img src="{% static 'images/student.png' %}" class="profile_image_10" alt="">
+        <h9>{{request.session.stuname}}</h9>
+        
+        <a class ="corh_link" href="{% url 'taketoSdash' pk=request.session.stuemail %}">Back</a>
+    
+    </div> 
+    <!--header area end-->
+
+
+        <div class="Cor_container">
+            
+
+            
+                <form  class="form" autocomplete="off" action="" method="POST"
+                    >
+                    {% csrf_token %}
+
+                    {% for q in check%}
+                    <div class="question">
+<br>
+                    <h3 class="qts">{{ forloop.counter }}. } &nbsp {{q.Question}}</h3>
+                    {% comment %} <h7 class ="mks">{{q.marks}}-mark</h7> {% endcomment %}
+                    <h5 style = "position: absolute;
+                    width: 300px;
+                    left: 85%;
+                    font-weight: 900;
+                    color: #646464;
+                    font-size: 22px;">{%if q.Selected_Ans  is None %}[0/{{q.marks}}] &nbsp(Not Attempted!){%endif%}</h5>
+
+                
+
+                    <div class="ans_field" >
+                       
+
+                        <img src="
+                        {% if q.Option1 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                        {% static 'images/checked.png' %} 
+                        {% elif q.Option1 == q.Selected_Ans and q.answer != q.Selected_Ans%}
+                        {% static 'images/cancel.png' %}
+                        {% endif   %}"  alt="" style="position: absolute;width: 4%;top: 17px;left: 93%;">
+
+                        <label name="op"   value="{{q.Option1}}" {% if q.Option1 == q.Selected_Ans and q.answer == q.Selected_Ans %} class="green" class="check"{% elif q.Option1 == q.Selected_Ans and q.answer != q.Selected_Ans %} class="red"  {% elif  q.Option1 == q.answer%} class=" correctanswer" {% endif %}>
+                         
+                            {% if q.Option1 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                            <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: darkgreen;font-size: 20px;" >{{q.marks}}/{{q.marks}}</span>   
+                            {% elif q.Option1 == q.Selected_Ans and q.answer != q.Selected_Ans %} 
+                            <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: #ed2626;font-size: 20px;" >0/{{q.marks}}</span>  
+                            {% endif %}
+                            <span style="font-weight: 600;">Opt [a] </span> : &nbsp&nbsp{{q.Option1}}
+                        </label>
+                    </div>
+
+
+
+                    <div class="ans_field" >
+                       
+
+                        <img src="
+                        {% if q.Option2 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                        {% static 'images/checked.png' %} 
+                        {% elif q.Option2 == q.Selected_Ans and q.answer != q.Selected_Ans%}
+                        {% static 'images/cancel.png' %}
+                        {% endif   %}"  alt="" style="position: absolute;width: 4%;top: 17px;left: 93%;">
+                        
+                        <label name="op"  value="{{q.Option2}}" {% if q.Option2 == q.Selected_Ans and q.answer == q.Selected_Ans %} class="green" class="check"{% elif q.Option2 == q.Selected_Ans and q.answer != q.Selected_Ans %} class="red"   {% elif  q.Option2 == q.answer%} class=" correctanswer"{% endif %} >
+
+                            {% if q.Option2 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                         <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: darkgreen;font-size: 20px;" >{{q.marks}}/{{q.marks}}</span>   
+                         {% elif q.Option2 == q.Selected_Ans and q.answer != q.Selected_Ans %} 
+                         <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: #ed2626;font-size: 20px;" >0/{{q.marks}}</span>  
+                         {% endif %}
+                         <span style="font-weight: 600;">Opt [b] </span> : &nbsp&nbsp{{q.Option2}}
+                        </label>
+                    </div>
+
+
+                    <div class="ans_field" >
+                       
+                        
+
+                        <img src="
+                        {% if q.Option3 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                        {% static 'images/checked.png' %} 
+                        {% elif q.Option3 == q.Selected_Ans and q.answer != q.Selected_Ans%}
+                        {% static 'images/cancel.png' %}
+                        {% endif   %}"  alt="" style="position: absolute;width: 4%;top: 17px;left: 93%;">
+
+
+                        <label  name="op"  value="{{q.Option3}}" {% if q.Option3 == q.Selected_Ans and q.answer == q.Selected_Ans %} class="green" {% elif q.Option3 == q.Selected_Ans and q.answer != q.Selected_Ans %} class="red" {% elif  q.Option3 == q.answer%} class=" correctanswer"{% endif %}>
+
+                            {% if q.Option3 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                            <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: darkgreen;font-size: 20px;" >{{q.marks}}/{{q.marks}}</span>   
+                            {% elif q.Option3 == q.Selected_Ans and q.answer != q.Selected_Ans %} 
+                            <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: #ed2626;font-size: 20px;" >0/{{q.marks}}</span>  
+                            {% endif %}
+
+                            <span style="font-weight: 600;">Opt [c] </span> : &nbsp&nbsp{{q.Option3}}
+                        </label>
+                    </div>
+
+
+                    <div class="ans_field" >
+
+                     
+
+                        <img src="
+                        {% if q.Option4 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                        {% static 'images/checked.png' %} 
+                        {% elif q.Option4 == q.Selected_Ans and q.answer != q.Selected_Ans%}
+                        {% static 'images/cancel.png' %}
+                        {% endif   %}"  alt="" style="position: absolute;width: 4%;top: 17px;left: 93%;">
+
+                        <label name="op"  value="{{q.Option4}}"  {% if q.Option4 == q.Selected_Ans and q.answer == q.Selected_Ans %} class="green"  id="xyz"
+                         {% elif q.Option4 == q.Selected_Ans and q.answer != q.Selected_Ans %} class="red"   {% elif  q.Option4 == q.answer%} class=" correctanswer"{% endif %}>
+
+                         {% if q.Option4 == q.Selected_Ans and q.answer == q.Selected_Ans %}
+                         <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: darkgreen;font-size: 20px;" >{{q.marks}}/{{q.marks}}</span>   
+                         {% elif q.Option4 == q.Selected_Ans and q.answer != q.Selected_Ans %} 
+                         <span style="position: absolute;top: 18px;left: 84%;font-weight: 900;color: #ed2626;font-size: 20px;" >0/{{q.marks}}</span>  
+                         {% endif %}
+                        
+                            <span style="font-weight: 600;">Opt [d] </span>: &nbsp&nbsp{{q.Option4}}
+                            
+                        </label>
+                    </div>
+                        
+                    
+
+                       
+
+
+
+                    {% comment %} <div class="ans_field">
+                        <label name="op2" class="cor">
+                            Correct_Answer :&nbsp {{q.answer}}
+                        </label>
+                    </div> {% endcomment %}
+
+                        <br>
+                        <hr style="margin-top: 1rem;margin-bottom: 1rem;border: 0;border-top: 6px solid rgba(0,0,0,.1);position: relative;right: 10%;width: 121%;">
+                </div>
+
+                    
+
+                    {% endfor %}
+
+        
+                   
+
+                </form>
+            </div>
+        
+    <script>
+
+
+
+        </script>
+
+        
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    
+
+    
+</body>
+
+</html>

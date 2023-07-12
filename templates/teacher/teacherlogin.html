@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel ='icon' href="{% static 'images/logo.png' %}"/>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@100;200;300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>QuizzUS</title>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <nav>
+                <div class="logo">
+                    <h1 style="position: absolute;left: 13%;top: 13%;color:#6e2e9d;">QuizzUS</h1>
+                    <img src="{% static 'images/logo.png' %}"  alt="" style="position: relative;width: 101px;right: 42%;bottom: -4px;">
+        
+                    
+                  </div>
+                <ul class="navitems">
+                    <li>
+                        <a href="{% url 'homepage' %}">Home</a>
+                    </li>
+                    <li>
+                        <a class="current" href="{% url 'taketoTlogin' %}">Teacher</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'taketoSlogin' %}">Student</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+         {% comment %} <div class="bg1-img">
+            <img src="{% static 'images/Background.png' %}" alt="">
+        </div>  {% endcomment %}
+
+    </header>
+            
+
+    <div class="logincontainer">
+
+        <h1> Login</h1>
+        <form action="{% url 'teacherdash' %}" method="post">
+            {% csrf_token %}
+            {% comment %} {% if msg %}
+            <h5>{{msg}}</h5>
+            {% endif %} {% endcomment %}
+            <div class="box">
+                <input type="email" name="temail" id="email" placeholder="Email-id" autocomplete="off" required>
+            </div>
+
+            <div class="box">
+                <input type="password" name="tpass" id="password" placeholder="Password"  required>
+            </div>
+            <button class="btn" type="submit">Sign In</button>
+            <div class="reglink">
+                <p>Don't have an account?<a href="{% url 'taketoTreg' %}">&nbsp; Create Account ! </a>
+                </p>
+
+            </div>
+        </form>
+    </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+    
+        {% if msg %}
+        swal({
+            title: "Oops !",
+            text: '{{msg}}',
+            icon: "error",
+        
+          });       
+        {% endif %}
+    
+    </script>
+
+
+</body>
+
+</html>

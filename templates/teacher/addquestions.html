@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <link rel ='icon' href="{% static 'images/logo.png' %}"/>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@100;200;300;400;600;700&display=swap"
+    rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+        
+    </script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="utf-8">
+
+    <title>QuizzUS</title>
+
+</head>
+
+<body>
+    
+
+    <!--header area start-->
+    <div class="nav-container">
+        <label name="ran" id = "num" style="opacity:0">{{q}}</label>
+        <div class="logo">
+            <h1 style="position: absolute;left: 13%;top: 20%;color:#6e2e9d;font-size: 38px;font-weight: 600;left: 50%;">QuizzUS</h1>
+            <img src="{% static 'images/logo.png' %}"  alt="" style="position: relative;width: 101px;left: 38%;bottom: 40px;">
+        </div>
+    </div>
+    <!--header area end-->
+
+    <!--sidebar start-->
+    <div class="sidebar">
+        <div class ="panel">
+
+        <center>
+
+            <img src="{% static 'images/Teacher.png' %}" class="profile_image" alt="">
+            
+            <h6 >{{request.session.tename}}</h6>
+            <h4>(teacher)</h4>
+
+
+        </center>
+
+
+                <ul class="sideitems">
+                    <li>
+                        <a   href="{% url 'taketoTdash' %}">Home</a>
+                    </li>
+        
+                    <li>
+                        <a href="/student/student-marks">Reports</a>
+                    </li>
+        
+                    <li>
+                        <a  href="/" style="margin-top: 100px;">Logout</a>
+                    </li>
+    </div>
+</div>
+    <!--sidebar end-->
+
+    <div class="form-area-aq">
+       
+        <form action="{% url 'getquestions' pk=request.session.tename fk=request.session.quizn %}" method="post">
+            {% csrf_token %}
+            
+            
+
+            
+
+            <h3>Add Questions</h3>
+
+            {% comment %} <h3></h3> {% endcomment %}
+            <h3 style="position: absolute;left: 6px;top: 0px; width: 496px;">Quiz Name :&nbsp{{request.session.quizn}}</h3>
+            <h3 name ="qt" id = "123" style="position: absolute;left: 0%;top: 18%;width: auto;" >{{count}}</h3>
+            <label  id = "sub" style="position: absolute;left: 0%;top: 7%;width: auto;color: purple;" ></label>
+
+            {% comment %} <h3  style="position: absolute;left: 0%;top: 18%;width: auto;" > Number of questions created should be more then number of random questions to be assigned ! (Number of Random Question to be Assigned = {{q}})</h3> {% endcomment %}
+
+
+
+            <hr>
+            <p class="single-form-mks">
+                <label for="marks">Marks</label>
+                <input type="text" name="marks" id="marks" required>
+                
+            </p>
+            <p class="single-form-aq">
+                <label for="questions">Enter Question</label><br>
+                <input type="text" name="question" id="question" required>
+                
+            </p>
+            <p class="single-form-1">
+                <input type="radio" class="in" id="one1" name="ans" value="" />
+                <input type="text" class="inp" id="op1" name="optionA" for="one1"/>
+
+
+               
+                
+            </p>
+            <p class="single-form-1">
+                <input type="radio" class="in" id="one2" name="ans" value=""  />
+                <input type="text" class="inp" id="op2" name="optionB" for="one2"  />
+
+
+               
+            </p>
+            <p class="single-form-1">
+                <input type="radio" class="in" id="one3" name="ans" value=""  />
+                <input type="text"class="inp"  id="op3" name="optionC" for="one3"/>
+
+                
+            </p>
+            <p class="single-form-1">
+                <input type="radio" class="in" id="one4" name="ans" value=""  />
+                <input type="text" class="inp" id="op4" name="optionD" for="one4" />
+
+               
+                
+            </p>
+
+
+           
+            <input class="addqt"type="submit" value="Next "   >
+        </form>
+
+        <li >
+        <a id="hello" href="{% url 'taketoPreview'  pk=request.session.tename fk=request.session.quizn %}" target="blank" >Review</a>
+        </li>
+    </div>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+
+   
+function ShowHide()
+{ 
+    var pre = document.getElementById("num").innerText
+    console.log(pre)
+    var que = document.getElementById("123").innerText
+    console.log(que)
+    if (Number(que)<= Number(pre)) 
+  {
+     console.log(`lesss`)
+     $("#sub").text("Add atleast ["+pre+"] or more number of questions !");
+
+
+  $("#hello ").click(function(e){
+
+    Swal.fire({
+        title: 'More Questions Required !',
+      //  text: 'Add more then [' +pre+ '] questions , to allot random quetions to students !'  ,
+        text: 'You have created less number of questions then the number of random questions to be assigned ! \n No. of Random Question : '+pre  ,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#800080',
+      }) 
+    e.preventDefault();});
+  }
+  
+}
+
+
+$(document).ready(function(){
+
+    ShowHide();
+
+}); 
+ 
+
+
+        $(function () {
+            var $src = $('#op1'),
+                $dst = $('#one1');
+            $src.on('input', function () {
+                $dst.val($src.val());
+            });
+        });
+        $(function () {
+            var $src = $('#op2'),
+                $dst = $('#one2');
+            $src.on('input', function () {
+                $dst.val($src.val());
+            });
+        });
+        $(function () {
+            var $src = $('#op3'),
+                $dst = $('#one3');
+            $src.on('input', function () {
+                $dst.val($src.val());
+            });
+        });
+
+
+        $(function () {
+            var $src = $('#op4'),
+                $dst = $('#one4');
+            $src.on('input', function () {
+                $dst.val($src.val());
+            });
+        });
+        
+
+        jQuery( function( $ ) { 
+            $('form').on( 'submit', function( oEvent ) { 
+                if (   !document.getElementById('one1').checked   
+                &&   !document.getElementById('one2').checked 
+                &&   !document.getElementById('one3').checked
+                &&   !document.getElementById('one4').checked) 
+                {
+                    oEvent.preventDefault(); 
+                    
+                        swal({
+                            title: "Correct Answer Missing !",
+                            text: "Please Choose the Radio Button of Correct Option!  ",
+                            icon: "info",
+                        
+                          });   
+                
+
+                }
+            } )
+        } );
+        
+    </script>
+</body> 
+</html>   
+
+    

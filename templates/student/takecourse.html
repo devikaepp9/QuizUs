@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <link rel ='icon' href="{% static 'images/logo.png' %}"/>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Poppins:wght@100;200;300;400;600;700&display=swap"
+    rel="stylesheet">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/student.css' %}">
+    <meta charset="utf-8">
+    <title>QuizzUS</title>
+
+<style>
+        a.disabled1 {
+             pointer-events: none;
+         
+            color: grey; 
+
+
+        }
+    .true a {
+
+        color:#ff7e7e;
+
+    }
+
+
+        
+    </style>
+
+
+</head>
+
+<body>
+
+    
+    <!--header area start-->
+    <div class="nav-container">
+
+        <div class="logo">
+            <h1 style="position: absolute;left: 13%;top: 20%;color:#6e2e9d;font-size: 38px;font-weight: 600;left: 50%;">QuizzUS</h1>
+            <img src="{% static 'images/logo.png' %}"  alt="" style="position: relative;width: 101px;left: 43%;bottom: 9px;">
+
+            
+          </div>    </div>
+   
+
+    <div class="sidebar">
+        <div class ="panel">
+
+        <center>
+
+            <img src="{% static 'images/student.png' %}" class="profile_image" alt="">
+            
+            <h6>{{request.session.stuname}}</h6>
+            <h4>(Student)</h4>
+
+        </center>
+
+        <ul class="sideitems">
+            <li>
+                <a   href="{% url 'taketoSdash'  pk=request.session.stuemail %}">Home</a>
+            </li>
+
+            <li>
+                <a href="{% url 'taketoreportpage' eml=request.session.stuemail %}">Attemped</a>
+            </li>
+
+            <li>
+                <a  href="/" style="margin-top: 100px;">Logout</a>
+            </li>
+
+    </div>
+</div>
+    <!--sidebar end-->
+    <div>
+        <label>By Prof :{{teachername}} </label>
+    
+    </div >
+    <div>
+        <label  style="position: absolute;top: 15%;left: 36%;font-size: 21px;font-weight: 600;color: #755cc6;"> From Professor :&nbsp{{pk}} </label>
+    
+    </div >
+            
+
+    <div class="content">
+    
+            <div class="row" id ="row" style="background: #ffffff;">
+                
+                            <table name ="mytab"class="table " id ="tab">
+                
+
+                                <thead bgcolor = "#a721e6e8" >
+                                    <tr>
+                                        <th scope="col">Sr. No.</th>
+                                        <th scope="col">Quiz Name</th>
+
+                                        <th scope="col">End_Date</th>
+                                        <th scope="col">End_Time</th>
+                                        <th scope="col">QuizTime(mins)</th>
+
+
+                                        
+
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    {% for i in c %}
+                                    <tr>
+                                      
+                                    
+                                        <th scope="row">{{ forloop.counter }}</th>
+
+                                        <td>
+                                            
+
+                                           
+
+
+                                            <a   id="name" href="{% url 'taketogivexam' pk=i.quizname eml=request.session.stuemail time=i.totaltime name=teachername %}" {% for q in s %} {% if q.isattempted == True and q.qname == i.quizname and q.sname == request.session.stuname %} class="disabled1"  {% endif %} {% endfor %} >
+                                                {% for q in s %}
+
+                                                <img src="
+                                                {% if q.isattempted == True and q.qname == i.quizname and q.sname == request.session.stuname %}
+                                                {% static 'images/check.png' %} 
+                                                {% endif   %} 
+                                                "  alt="" style="position: absolute; width: 2%;left: 10%;" >
+                                                {% endfor %}
+                                                
+                                                {{i.quizname}}
+
+
+                                               
+                                            </a></td> 
+                                          
+    
+
+                                        <td id="duedt">{{i.Duedate}}</td>
+                                        <td id="time">{{i.Time}}</td>
+                                        <td id="duedt" style="color:pruple ; font-weight:bold">{{i.totaltime}}&nbsp min(s)</td>
+
+
+                                       
+                                        
+                                    </tr>
+                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                     
+            </div>
+    </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script> 
+   
+   
+
+
+    for ( let [i,row] of [...tab.rows].entries() ) 
+    {
+        for( let [j,cell] of [...row.cells].entries() ) 
+        {
+        }
+        var test=document.getElementById("tab").rows[i].cells[2].innerText;
+        console.log(test)
+        var test2=document.getElementById("tab").rows[i].cells[1].innerText;
+        console.log(test2)
+        var test9=document.getElementById("tab").rows[i].cells[3].innerText;
+        console.log(test9)
+
+       
+        var date = new Date();
+        var cdate = date.getDate();
+        if(cdate <10){
+            cdate = '0' +cdate;
+        }
+        var month = date.getMonth() + 1;
+        if(month <10){
+            month = '0' +month;
+        }
+        var year = date.getUTCFullYear();
+        var todayDate = year +"-"+month +"-"+ cdate;
+
+
+        var chr = date.getHours();
+        if(chr<10){
+            chr = '0' +chr;
+        }
+        var min = date.getMinutes();
+        if(min<10){
+            min = '0' +min;
+        }
+        var ttime = chr +":"+min;
+        console.log(ttime);
+
+
+        console.log(todayDate);
+        
+
+        if( todayDate>=test && ttime>test9 ){
+            
+            var test3=document.getElementById("tab").rows[i].cells[1].setAttribute('class','true');
+
+
+            console.log(test3)
+           window.onload = function(){
+            var anchors = document.querySelectorAll("[class=true]");
+            
+            for(var i = 0; i<anchors.length ; i++){
+            anchors[i].onclick = function()
+
+            {
+                swal({
+                    title: "Oops !",
+                    text: "DUE DATE PASSED !!",
+                    icon: "error",
+                
+                  });   
+                                
+                return false};
+
+                
+            
+            }
+            };
+
+            console.log(`date ended`)    
+
+        }
+       
+
+        console.log(`.........`)
+        console.log(`.........`)
+
+    }
+
+
+    
+
+  
+
+
+
+
+    
+
+</script>
+    
+
+</body>
+
+</html>
